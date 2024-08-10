@@ -18,8 +18,8 @@ const AllocatedDetails = () => {
     const fetchData = async () => {
       try {
         const [studentsRes, busesRes] = await Promise.all([
-          axios.get('http://localhost:3000/students-with-buses'),
-          axios.get('http://localhost:3000/buses')
+          axios.get('https://krpbus.vercel.app/students-with-buses'),
+          axios.get('https://krpbus.vercel.app/buses')
         ]);
         setStudents(studentsRes.data.students || []);
         setBuses(busesRes.data.buses || []);

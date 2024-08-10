@@ -12,7 +12,7 @@ const StudentBusTable = () => {
   useEffect(() => {
     const fetchStudentsWithBuses = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/students-with-buses');
+        const response = await axios.get('https://krpbus.vercel.app/students-with-buses');
         setStudentsWithNoBus(response.data.studentsWithNoBus);
         setNonAllocatedBuses(response.data.nonAllocatedBuses);
         setAllocatedCount(response.data.allocatedCount);

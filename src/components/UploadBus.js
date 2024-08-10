@@ -30,7 +30,7 @@ const UploadBus = () => {
 
     setUploading(true);
     try {
-      const response = await axios.post('http://localhost:3000/upload-bus', formData, {
+      const response = await axios.post('https://krpbus.vercel.app/upload-bus', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

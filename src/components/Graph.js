@@ -12,7 +12,7 @@ const Graph = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/students');
+      const response = await axios.get('https://krpbus.vercel.app/students');
       const data = response.data;
       setStudentData(data);
     } catch (error) {

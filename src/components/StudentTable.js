@@ -11,7 +11,7 @@ const StudentTable = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/students');
+      const response = await axios.get('https://krpbus.vercel.app/students');
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching student data:', error);

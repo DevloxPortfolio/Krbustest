@@ -11,7 +11,7 @@ const BusTable = () => {
 
   const fetchBuses = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/buses');
+      const response = await axios.get('https://krpbus.vercel.app/buses');
       setBuses(response.data);
     } catch (error) {
       console.error('Error fetching bus data:', error);

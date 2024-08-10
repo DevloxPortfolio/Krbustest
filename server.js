@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const dbURI = process.env.MONGODB_URI;
 const app = express();
-const port = 3000; 
+const port = process.env.PORT || 3000; // Ensure port is dynamic or use an environment variable
 
 // Connect to MongoDB
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -163,137 +163,17 @@ app.post('/upload-bus', upload.single('busFile'), async (req, res) => {
   }
 });
 
-// Fetch Students with Bus Allocation Route
-app.get('/students-with-buses', async (req, res) => {
-  try {
-    const students = await Student.find({});
-    const buses = await Bus.find({});
-    const stops = await Stop.find({});
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
 
-    const stopMap = stops.reduce((map, stop) => {
-      map[stop.code] = stop.stopname;
-      return map;
-    }, {});
+// API Routes here...
 
-    const allocatedBuses = new Set();
-    let allocatedCount = 0;
-    let nonAllocatedCount = 0;
-    let nonAllocatedStudents = [];
-    
-    // Clone buses to track capacity changes
-    const busesClone = buses.map(bus => ({ ...bus.toObject() }));
-
-    for (const student of students) {
-      let assigned = false;
-      for (const bus of busesClone) {
-        for (let i = 1; i <= 9; i++) {
-          if (student.Stop === bus[`stop${i}`] && bus.Capacity > 0) {
-            student.BusNumber = bus.Busno;
-            student.BusSrNumber = bus.BusSrNO;
-            student.StopName = stopMap[student.Stop]; 
-            bus.Capacity--;
-            allocatedBuses.add(bus.Busno);
-            assigned = true;
-            break;
-          }
-        }
-        if (assigned) break;
-      }
-      if (assigned) {
-        allocatedCount++;
-      } else {
-        nonAllocatedStudents.push(student);
-      }
-    }
-
-    // Update the database with the allocated bus information
-    await Promise.all(students.map(student => Student.updateOne({ _id: student._id }, student)));
-    nonAllocatedCount = buses.length - allocatedBuses.size;
-
-    // Compute capacity details
-    const capacityDetails = buses.map(bus => ({
-      BusNumber: bus.Busno,
-      Route: bus.Route,
-      InitialCapacity: bus.Capacity + (buses.find(b => b.Busno === bus.Busno).Capacity - bus.Capacity),
-      FinalCapacity: bus.Capacity
-    }));
-
-    // Log allocated students with bus details and stops
-    console.log('Allocated Students with Bus Details:');
-    students.forEach(student => {
-      if (student.BusNumber) {
-        console.log(`Enrollment Code: ${student.EnrollmentCode}, Student Name: ${student.StudentName}, Bus Number: ${student.BusNumber}, Bus SR Number: ${student.BusSrNumber}, Stop: ${student.StopName}`);
-      }
-    });
-
-    res.status(200).json({ students, nonAllocatedStudents, allocatedCount, nonAllocatedCount, capacityDetails });
-  } catch (error) {
-    console.error('Error fetching student data:', error);
-    res.status(500).json({ message: 'Error fetching student data', error });
-  }
-});
-
-// Search Students by Bus Number
-app.get('/api/students/search-by-bus', async (req, res) => {
-  try {
-    const { busNumber } = req.query;
-    const students = await Student.find({ BusNumber: busNumber });
-    res.status(200).json(students);
-  } catch (err) {
-    console.error('Error searching students by bus:', err);
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Search Buses by Student Name
-app.get('/api/buses/search-by-student', async (req, res) => {
-  try {
-    const { studentName } = req.query;
-    const students = await Student.find({ StudentName: new RegExp(studentName, 'i') });
-    const busNumbers = students.map(student => student.BusNumber);
-    const buses = await Bus.find({ Busno: { $in: busNumbers } });
-    res.status(200).json(buses);
-  } catch (err) {
-    console.error('Error searching buses by student:', err);
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Fetch All Students Route
-app.get('/students', async (req, res) => {
-  try {
-    const students = await Student.find({});
-    res.status(200).json(students);
-  } catch (error) {
-    console.error('Error fetching student data:', error);
-    res.status(500).json({ message: 'Error fetching student data', error });
-  }
-});
-
-// Fetch All Buses Route
-app.get('/buses', async (req, res) => {
-  try {
-    const buses = await Bus.find({});
-    res.status(200).json(buses);
-  } catch (error) {
-    console.error('Error fetching bus data:', error);
-    res.status(500).json({ message: 'Error fetching bus data', error });
-  }
-});
-
-// Search Buses by Route Route
-app.get('/api/buses/search', async (req, res) => {
-  try {
-    const { route } = req.query;
-    const buses = await Bus.find({ Route: { $regex: route, $options: 'i' } });
-    res.json(buses);
-  } catch (err) {
-    console.error('Error searching buses:', err);
-    res.status(500).json({ message: err.message });
-  }
+// Catch-all handler to serve the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running at https://krbustest.vercel.app/${port}/`);
+  console.log(`Server running at http://localhost:${port}/`);
 });

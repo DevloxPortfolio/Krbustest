@@ -1,0 +1,173 @@
+/* Reset some default styles for consistency */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Centering the container and making it responsive */
+.container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.show-all-button{ 
+  width: fit-content; 
+  
+}
+
+/* Styling the header */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h3 {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+header h6 {
+  font-size: 0.5em;
+  color: #555;
+}
+
+/* Styling the main content section */
+.main-content {
+  padding: 20px;
+}
+
+/* Search section styling */
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-section input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.search-section button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #007bff;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.search-section button.print-button {
+  background-color: #28a745;
+}
+
+.search-section button.show-all-button {
+  background-color: #007bff;
+}
+
+.search-section button:hover {
+  background-color: #0056b3;
+}
+
+.search-section button.print-button:hover {
+  background-color: #218838;
+}
+
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: start;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+/* Error message styling */
+.error-message {
+  color: #d9534f;
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+/* Print button styling inside tables */
+.table button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.table button:hover {
+  background-color: #0056b3;
+}
+.switchlan{ 
+  width: 10%;
+  height: auto; 
+  background-color: #007bff;
+  color: white; 
+  border: none; 
+  border-radius: 20px;
+}
+/* Responsive styling */
+@media (max-width: 768px) {
+  .search-section {
+    flex-direction: column;
+  }
+
+  .search-section input[type="text"] {
+    width: 100%;
+  }
+
+  .search-section button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .container {
+    width: 95%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  header h3 {
+    font-size: 1.2em;
+  }
+
+  header h6 {
+    font-size: 0.9em;
+  }
+}

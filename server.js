@@ -6,9 +6,10 @@ const multer = require('multer');
 const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
+
 const dbURI = process.env.MONGODB_URI;
+const port = process.env.PORT || 5001; // Use an environment variable or default to 5000
 const app = express();
-const port = process.env.PORT || 3000; // Ensure port is dynamic or use an environment variable
 
 // Connect to MongoDB
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -166,8 +167,6 @@ app.post('/upload-bus', upload.single('busFile'), async (req, res) => {
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'build')));
 
-// API Routes here...
-
 // Catch-all handler to serve the React app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -175,5 +174,5 @@ app.get('*', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
+  console.log(`Server running at http://localhost:${port}/`); // Adjust the URL for local development
 });
